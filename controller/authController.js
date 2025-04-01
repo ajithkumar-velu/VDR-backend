@@ -33,6 +33,7 @@ const login = async (req, res)=>{
         const { email, password } = req.body;
         const user = await User.findOne({email})
         
+        if(password.length < 8) return res.status(400).json({ message: "Password must 8 character"})
         if(!user) return res.status(400).json({ message: "Invalid credentals"})
             console.log("check");
         
@@ -46,7 +47,7 @@ const login = async (req, res)=>{
             secure: process.env.NODE_ENV === "production",
             sameSite: "strict"
         })
-        return res.status(200).json({ message: "Login successfully"})
+        return res.status(200).json({ _id: user._id, fullname: user.fullname, email: user.email, role: user.role, message: "Login successfully"})
         
         
     } catch (error) {
